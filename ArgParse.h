@@ -29,6 +29,13 @@ class Parser
 public:
     Parser() = default;
 
+    /**
+     * Adds a new flag for the parser.
+     * @param name: flag short name.
+     * @param nice_name: flag long name.
+     * @param number: number of possible occurence, -1 meaning any number.
+     * @param description: description for the flag.
+     */
     void AddFlag(std::string name, std::string nice_name="", int number=0, std::string description="")
     {
         std::shared_ptr<Flag> f = std::make_shared<Flag>();
@@ -45,11 +52,21 @@ public:
     }
 
 protected:
+    /**
+     * Returns whether argument is a flag.
+     * @param a: argument.
+     * @return is a flag.
+     */
     bool IsFlag(std::string a) const
     {
         return (flags.find(a) != flags.end());
     }
 
+    /**
+     * Returns flag ptr for flag name.
+     * @param flag: flag name.
+     * @return flag ptr.
+     */
     std::shared_ptr<Flag> GetFlag(std::string flag) const
     {
         return flags.at(flag);
@@ -57,6 +74,12 @@ protected:
 
 public:
 
+    /**
+     * Parses command line arguments.
+     * @param argc: argument count.
+     * @param argv: argument values.
+     * @param start: start.
+     */
     void Parse(int argc, char* argv[], int start=1)
     {
         std::shared_ptr<Flag> current = nullptr;
@@ -88,6 +111,12 @@ public:
         }
     }
 
+    /**
+     * Returns if flag was found at least one time
+     * during parsing.
+     * @param flag: flag name.
+     * @return flag was found.
+     */
     bool FlagFound(std::string flag) const
     {
         if (flags.find(flag) == flags.end())
@@ -98,6 +127,11 @@ public:
         return flags.at(flag)->found;
     }
 
+    /**
+     * Returns all values for specified flag.
+     * @param flag: flag name.
+     * @return vector of values.
+     */
     std::vector<std::string> FlagResults(std::string flag) const
     {
         if (flags.find(flag) == flags.end())
@@ -108,6 +142,11 @@ public:
         return flags.at(flag)->results;
     }
 
+    /**
+     * Returns first value for specified flag.
+     * @param flag: flag to query.
+     * @return first value, empty string if none.
+     */
     std::string FlagResult(std::string flag) const
     {
         if (flags.find(flag) == flags.end())
@@ -118,6 +157,10 @@ public:
         return flags.at(flag)->results.at(0);
     }
 
+    /**
+     * Returns default arguments.
+     * @return arguments.
+     */
     std::vector<std::string> Arguments() const
     {
         return arguments;
@@ -125,6 +168,10 @@ public:
     }
 
 protected:
+    /**
+     * Returns unique flags ptr list.
+     * @return set of flag ptr.
+     */
     std::set<std::shared_ptr<Flag>> _UniqueFlagList() const
     {
         std::set<std::shared_ptr<Flag>> res;
@@ -138,6 +185,10 @@ protected:
 
 public:
 
+    /**
+     * Formats documentation for the parser flags.
+     * @return doc.
+     */
     std::string Doc() const
     {
         std::string doc;
