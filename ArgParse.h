@@ -1,6 +1,7 @@
 #ifndef ARGPARSE_ARGPARSE_H
 #define ARGPARSE_ARGPARSE_H
 
+#include <iostream>
 #include <memory>
 #include <string>
 #include <set>
@@ -26,8 +27,15 @@ class Parser
     std::string program_name;
     std::unordered_map<std::string, std::shared_ptr<Flag>> flags;
     std::vector<std::string> arguments;
+
+    const std::string help = "-h";
+    const std::string help_nice = "--help";
+
 public:
-    Parser() = default;
+    Parser()
+    {
+        AddFlag(help, help_nice, 0, "Show this help.");
+    }
 
     /**
      * Adds a new flag for the parser.
@@ -208,7 +216,16 @@ public:
         }
 
         return doc;
+    }
 
+    bool HelpRequested() const
+    {
+        return FlagFound(help);
+    }
+
+    void ShowHelp() const
+    {
+        std::cout << Doc();
     }
 };
 
