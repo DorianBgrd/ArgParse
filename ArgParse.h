@@ -49,7 +49,13 @@ public:
         std::shared_ptr<Flag> f = std::make_shared<Flag>();
         f->name = name;
         flags[name] = f;
+
         f->nice_name = nice_name;
+        if (!nice_name.empty())
+        {
+            flags[nice_name] = f;
+        }
+
         f->number = number;
         f->description = description;
     }
@@ -162,7 +168,13 @@ public:
             return {};
         }
 
-        return flags.at(flag)->results.at(0);
+        auto fres = flags.at(flag)->results;
+        if (fres.empty())
+        {
+            return {};
+        }
+
+        return fres.at(0);
     }
 
     /**
