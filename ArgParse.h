@@ -116,6 +116,8 @@ public:
                 {
                     arguments.push_back(a);
                 }
+
+                current = nullptr;
             }
 
             else
