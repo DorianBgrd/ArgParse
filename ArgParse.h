@@ -94,7 +94,7 @@ public:
      * @param argv: argument values.
      * @param start: start.
      */
-    void Parse(int argc, char* argv[], int start=1)
+    bool Parse(int argc, char* argv[], int start=1)
     {
         std::shared_ptr<Flag> current = nullptr;
         for (int i = start; i < argc; i++)
@@ -125,6 +125,14 @@ public:
                 arguments.push_back(a);
             }
         }
+
+        if (HelpRequested())
+        {
+            ShowHelp();
+            return false;
+        }
+
+        return true;
     }
 
     /**
@@ -219,6 +227,7 @@ public:
 
         for (const auto &flag : _UniqueFlagList())
         {
+            doc += "\n";
             doc += flag->name;
             if (!flag->nice_name.empty())
             {
@@ -227,6 +236,7 @@ public:
 
             doc += " :\n";
             doc += flag->description;
+            doc += "\n";
         }
 
         return doc;
